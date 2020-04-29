@@ -1,36 +1,39 @@
 import requests
-from question import Question
+from question import QuestionList
+import colorama as color
 
 
 class Trivia:
     URL = "https://opentdb.com/api.php"
 
     def __init__(self, amount, difficulty):
+        color.init()
+
         self.amount = amount
-        self.res = requests.get(self.URL,
-                                params={'amount': self.amount,
+        self.res = requests.get(self.URL, params={'amount': self.amount,
                                 'difficulty': difficulty}).json()
         self.score = 0
 
     def begin(self):
-        for question in self.questions():
+        qlist = QuestionList(self.res['results'])
+
+        for q in qlist:
             while True:
-                question.show()
+                q.show()
                 try:
-                    if question.isCorrect(input("ans: ")):
+                    if q.isCorrect(input("ans: ")):
                         self.score += 1
                     break
-                except ValueError:
-                    print('Not a valid answer! enter again...\n')
+                except (ValueError):
+                    print(color.Fore.RED)
+                    print('Not a valid answer! enter again...')
+                    print(color.Style.RESET_ALL)
 
             print()
 
         self.show_end_score()
 
-    def questions(self):
-        for i in range(self.amount):
-            yield Question(self.res['results'][i])
-
     def show_end_score(self):
-        greetings = "Congrats" if (self.score >= self.amount/2) else "Too bad"
-        print(f"{greetings}! you scored {self.score} out of {self.amount}.")
+        print(color.Fore.GREEN)
+        print(f"You scored {self.score} out of {self.amount}.")
+        print(color.Style.RESET_ALL)

@@ -6,7 +6,7 @@ def main():
     parser = argparse.ArgumentParser('Just a simple command line trivia')
 
     parser.add_argument("-a", "--amount", type=int, default=5,
-                        help="amount of questions to fetch (default 5, max 10)")
+                        help="amount of questions (default 5, max 10)")
     parser.add_argument("-l", "--level", type=int, default=1,
                         help="set difficulty level (default 1, max 3)")
 
@@ -18,7 +18,7 @@ def main():
 
     if args.level is not None:
         if args.level == 0 or args.level > 3:
-            parser.error('Level should be between 1 and 3 (inclusive)')
+            parser.error("Level should be between 1 and 3 (inclusive)")
 
     difficulty = ["easy", "medium", "hard"]
     level = difficulty[args.level - 1]
@@ -28,5 +28,5 @@ def main():
     trivia.begin()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -4,8 +4,8 @@ import random
 
 class Question:
     def __init__(self, prop):
-        self.category   = prop['category']
-        self.kind       = prop['type']
+        self.category   = prop["category"]
+        self.kind       = prop["type"]
         self.question   = html.unescape(prop['question'])
         self.correct    = prop['correct_answer']
         self.incorrects = prop['incorrect_answers']
@@ -26,8 +26,21 @@ class Question:
     def isCorrect(self, ans):
         correct_ind = self.answers.index(self.correct)
 
+        # raises ValueError
         ans = int(ans) - 1
+        if (ans < 0) or (ans >= len(self.answers)):
+            raise ValueError
+
         if ans == correct_ind:
             return True
 
         return False
+
+
+class QuestionList:
+    def __init__(self, questions):
+        self.qlist = questions
+
+    def __iter__(self):
+        for q in self.qlist:
+            yield Question(q)
